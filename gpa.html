@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>GPA Calculator (10.0 Scale)</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        body {
+               font-family: Arial, sans-serif;
+               margin: 0;
+   	padding: 0;
+
+    	background-image: url("background.jpg");
+    	background-size: cover;       
+    	background-position: top;  
+    	background-repeat: no-repeat; 
+    	background-attachment: fixed; 
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: center;
+        }
+
+        th {
+            background: #0069d9;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background: #f2f2f2;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 8px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .add-btn {
+            background: #28a745;
+            color: white;
+            margin-right: 10px;
+        }
+
+        .calc-btn {
+            background: #0069d9;
+            color: white;
+        }
+
+        .remove-btn {
+            background: #dc3545;
+            color: white;
+        }
+
+        .buttons {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .result {
+            text-align: center;
+            font-size: 22px;
+            font-weight: bold;
+        }
+   .footer {
+    text-align: center;
+    padding: 15px 10px;
+    font-size: 14px;
+    color: #ffffff;
+
+    background: rgba(0, 0, 0, 0.7);
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+}
+
+    </style>
+</head>
+<footer class="footer">
+    2026 GPA Calculator || Made by Mir.
+</footer>
+<body>
+
+<div class="container">
+    <h1>GPA Calculator (10.0 Scale)</h1>
+
+    <table id="gpaTable">
+        <thead>
+            <tr>
+                <th>Course</th>
+                <th>Credits</th>
+                <th>Grade</th>
+                <th>Remove</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><input type="text" placeholder="Course Name"></td>
+                <td><input type="number" min="0" step="0.5" value="3"></td>
+                <td>
+                    <select>
+                        <option value="10">A</option>
+                        <option value="9">A-</option>
+                        <option value="8">B</option>
+                        <option value="7">B-</option>
+                        <option value="6">C</option>
+                        <option value="5">C-</option>
+                        <option value="4">D</option>
+                        <option value="2">E</option>
+	          <option value="0">NC</option>
+                    </select>
+                </td>
+                <td>
+                    <button class="remove-btn" onclick="removeRow(this)">X</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="buttons">
+        <button class="add-btn" onclick="addRow()">Add Course</button>
+        <button class="calc-btn" onclick="calculateGPA()">Calculate GPA</button>
+    </div>
+
+    <div class="result" id="result">GPA: 0.00 / 10.00</div>
+</div>
+
+<script>
+    function addRow() {
+        const table = document.querySelector("#gpaTable tbody");
+        const row = table.insertRow();
+
+        row.innerHTML = `
+            <td><input type="text" placeholder="Course Name"></td>
+            <td><input type="number" min="0" step="0.5" value="3"></td>
+            <td>
+                <select>
+                    <option value="10">A</option>
+                    <option value="9">A-</option>
+                    <option value="8">B</option>
+                    <option value="7">B-</option>
+                    <option value="6">C</option>
+                    <option value="5">C-</option>
+                    <option value="4">D</option>
+                    <option value="2">E</option>
+                    <option value="0">NC</option>
+                </select>
+            </td>
+            <td>
+                <button class="remove-btn" onclick="removeRow(this)">X</button>
+            </td>
+        `;
+    }
+
+    function removeRow(button) {
+        const row = button.parentElement.parentElement;
+        row.remove();
+    }
+
+    function calculateGPA() {
+        const rows = document.querySelectorAll("#gpaTable tbody tr");
+        let totalCredits = 0;
+        let totalPoints = 0;
+
+        rows.forEach(row => {
+            const credits = parseFloat(row.cells[1].querySelector("input").value);
+            const grade = parseFloat(row.cells[2].querySelector("select").value);
+
+            if (!isNaN(credits) && credits > 0) {
+                totalCredits += credits;
+                totalPoints += credits * grade;
+            }
+        });
+
+        const gpa = totalCredits === 0 ? 0 : (totalPoints / totalCredits);
+        document.getElementById("result").innerText = `GPA: ${gpa.toFixed(2)} / 10.00`;
+    }
+</script>
+
+</body>
+</html>
